@@ -1,14 +1,13 @@
 # Windows 版本
 
-使用 C#、WPF 和 .NET 10，支持 Windows 11 的 x64 和 ARM64 电脑。只交付源码，不提供 EXE 或 ZIP，每个上传文件小于 25 MB。
+使用 C#、WPF 和 .NET 10。支持 Windows 11；提供 x64 和 ARM64 两种独立可执行文件。
 
-## 构建和运行
+## 直接运行
 
-1. 在 Windows 安装 [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)，保留仓库目录结构，包含 `assets/states.png`。
-2. 在仓库根目录运行下方 PowerShell 构建命令；普通 Intel / AMD 电脑选择 `win-x64`，ARM 电脑选择 `win-arm64`。
-3. 构建后双击对应 `dist` 子目录的 `start.cmd`。输出包含 DLL、JSON 配置和启动脚本，不打包 .NET 运行环境，也不生成应用 EXE。
-4. 将构建目录交给其他 Windows 使用者时，他们需要安装 .NET 10 Desktop Runtime，保留整个构建目录后运行 `start.cmd`。
-5. 左键摸头、按住拖动；右键喂饭和设置。系统托盘菜单可选择“回到右下角”。
+1. 普通 Intel / AMD 电脑使用 `whale-maid-windows-x64.zip`；Windows ARM 电脑使用 ARM64 包。
+2. 解压到固定文件夹，再双击 `WhalePet.exe`。运行包包含 .NET 桌面运行时，无需额外安装 .NET。
+3. 左键点击摸头、按住拖动；右键打开菜单。喂饭放在菜单里面，双击不会喂饭。
+4. Windows 系统托盘也提供菜单；若角色不在视野内，从托盘选择“回到右下角”。
 
 首次运行默认启用当前用户的登录自启动。可在右键菜单开启或关闭，不需要管理员权限。移动程序文件夹后，在新位置运行并重新启用自启动。
 
@@ -29,7 +28,7 @@
 自启动：当前用户注册表 `HKCU\Software\Microsoft\Windows\CurrentVersion\Run` 中的 `WhaleMaidPet`。
 退出只关闭本次运行；要停用下次登录自启动，请使用右键菜单。
 
-程序无声音、无系统提醒弹窗，不采集或保存键盘输入内容。PNG 素材嵌入应用 DLL。登录自启动使用已安装的 dotnet 主程序启动 WhalePet.dll，不需要额外的应用 EXE。
+程序无声音、无系统提醒弹窗，不采集或保存键盘输入内容。PNG 和界面全部打包在 exe 内。
 
 ## 从源码构建
 
@@ -41,15 +40,15 @@ powershell -ExecutionPolicy Bypass -File .\windows\build.ps1 -Runtime win-x64
 powershell -ExecutionPolicy Bypass -File .\windows\build.ps1 -Runtime win-arm64
 ```
 
-构建脚本先运行状态检查，再发布到 `dist/win-x64` 或 `dist/win-arm64`。发布内容为依赖系统 .NET 桌面运行环境的 DLL 和配置文件。脚本生成 start.cmd，不生成应用 EXE，不生成 ZIP。
+构建脚本先运行状态检查，再发布到 `dist/win-x64` 或 `dist/win-arm64`。发布文件是自包含的单文件，未使用商业代码签名证书。
 
 ## 验证范围
 
-Windows 状态及 DLL 启动命令检查通过，x64 和 ARM64 DLL 已在 Mac 上交叉编译。检查覆盖饭点边界、休眠跨日、摸头阈值、闲置阈值、预览到期、时区换算和保存状态。
+Windows 状态逻辑 35 项检查通过，x64 和 ARM64 版本已在 Mac 上交叉编译。检查覆盖饭点边界、休眠跨日、摸头阈值、闲置阈值、预览到期、时区换算和保存状态。
 
 当前没有 Windows 实机，因此透明窗口、系统托盘、DPI、拖动、自启动和 DeepSeek 应用启动尚未完成 Windows 实机验证。这些 Windows API 路径已实现并通过编译。
 
 ## 实现依据
 
-- [Microsoft：.NET 应用发布](https://learn.microsoft.com/dotnet/core/deploying/)
+- [Microsoft：单文件自包含发布](https://learn.microsoft.com/dotnet/core/deploying/single-file/overview)
 - [Microsoft：GetLastInputInfo 空闲检测](https://learn.microsoft.com/windows/win32/api/winuser/nf-winuser-getlastinputinfo)

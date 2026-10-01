@@ -1,0 +1,4 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework><Nullable>enable</Nullable><UseAppHost>false</UseAppHost></PropertyGroup>
+  <ItemGroup><Compile Include="../WhalePet.Windows/PetState.cs" Link="PetState.cs" /><Compile Include="../WhalePet.Windows/Storage.cs" Link="Storage.cs" /><Compile Include="../WhalePet.Windows/LaunchCommand.cs" Link="LaunchCommand.cs" /></ItemGroup>
+</Project>
